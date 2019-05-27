@@ -46,3 +46,10 @@ export const Button = styled.button`
   border: 2px solid palevioletred;
   border-radius: 3px;
 `;
+
+export const Error = styled.div`
+    width:600px;
+    margin-top: 20px;
+    text-align:center
+    color:red
+`
