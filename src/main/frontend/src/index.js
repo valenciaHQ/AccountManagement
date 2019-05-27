@@ -1,12 +1,24 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import {AccountAmount, AccountBox, AccountTitle, Button, ButtonsWrapper, Container, Error, Input} from './styled'
+
+import {
+    AccountAmount,
+    AccountBox,
+    AccountTitle,
+    Button,
+    ButtonsWrapper,
+    Container,
+    Error,
+    Input,
+    TransactionsTitle
+} from './styled'
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             accountData: undefined,
+            transactionsHistory: [],
             debit: '',
             credit: '',
             error: ''
@@ -18,7 +30,7 @@ class App extends Component {
     }
 
     onChange = e =>
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({[e.target.name]: e.target.value});
 
     fetchData = () => {
         fetch(
@@ -29,7 +41,12 @@ class App extends Component {
         )
             .then(response => response.json())
             .then(data => {
-                this.setState({accountData: data.amount})
+                const {amount, transactions} = data;
+                console.log(transactions)
+                this.setState({
+                                  accountData: amount,
+                                  transactionsHistory: transactions
+                              })
             })
             .catch(rejected => {
                 console.log(rejected);
@@ -51,8 +68,9 @@ class App extends Component {
                 return response && response.status === 400 ? response.json() : response
             })
             .then(data => {
-                data.errorCode && data.errorCode === 400 && this.setState({error: data.message})
-                this.fetchData()
+                data.errorCode && data.errorCode === 400
+                && this.setState({error: data.message}, () => this.fetchData());
+                data.status && data.status === 200 && this.setState({error: ''}, () => this.fetchData());
             })
             .catch(rejected => {
                 console.log(rejected);
@@ -71,14 +89,15 @@ class App extends Component {
             }
         )
             .then(response => response)
-            .then(data => data.status === 200 && this.fetchData())
+            .then(data => data.status === 200 && this.setState({error: ''}, () => this.fetchData()))
             .catch(rejected => {
                 console.log(rejected);
             });
     };
 
     render() {
-        const {accountData, debit, credit, error} = this.state;
+        const {accountData, debit, credit, error, transactionsHistory} = this.state;
+        console.log("render:", transactionsHistory)
         return (
             <Container>
                 <AccountBox>
@@ -100,6 +119,13 @@ class App extends Component {
                     <Button onClick={this.handleCredit}>Credit</Button>
                 </ButtonsWrapper>
                 {error && (<Error>{error}</Error>)}
+                <TransactionsTitle>Transactions history</TransactionsTitle>
+                {transactionsHistory && transactionsHistory.map((transaction, index) => {
+                    return <TransactionsContainer key={index}>
+                        const {amount, type} = transaction
+                        <Transaction amount={amount} type={type}/>
+                    </TransactionsContainer>
+                })}
             </Container>
         )
     }

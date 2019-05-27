@@ -1,9 +1,9 @@
 package com.avalencia.transactions.model;
 
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
 
 @ApiModel
 public class Transaction implements Serializable {

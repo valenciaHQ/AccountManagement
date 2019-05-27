@@ -1,16 +1,17 @@
 package com.avalencia.transactions.configuration;
 
 
-import com.avalencia.transactions.provider.NegativeAmountExceptionMapper;
-import com.avalencia.transactions.resources.AccountResource;
-import io.swagger.jaxrs.config.BeanConfig;
+import javax.ws.rs.ApplicationPath;
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
-import javax.ws.rs.ApplicationPath;
+import com.avalencia.transactions.provider.CORSResponseFilter;
+import com.avalencia.transactions.provider.NegativeAmountExceptionMapper;
+import com.avalencia.transactions.resources.AccountResource;
+import io.swagger.jaxrs.config.BeanConfig;
 
 @Configuration
 @ApplicationPath("/api")
@@ -24,6 +25,7 @@ public class ApiConfiguration extends ResourceConfig {
      */
     public ApiConfiguration() {
         super();
+        register(CORSResponseFilter.class);
         register(AccountResource.class);
         register(NegativeAmountExceptionMapper.class);
     }

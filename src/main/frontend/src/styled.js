@@ -16,7 +16,6 @@ export const AccountBox = styled.div`
 
 export const AccountTitle = styled.h4`
     color: "black";
-    margin-right: 5px
 `
 
 export const AccountAmount = styled.h4`
@@ -52,4 +51,8 @@ export const Error = styled.div`
     margin-top: 20px;
     text-align:center
     color:red
+`
+
+export const TransactionsTitle = styled.h2`
+    color: "black";
 `

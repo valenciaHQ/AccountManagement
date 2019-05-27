@@ -1,6 +1,8 @@
 package com.avalencia.transactions.exception;
 
-public class NegativeAmountException extends Exception {
+import java.io.Serializable;
+
+public class NegativeAmountException extends Exception implements Serializable {
 
     public NegativeAmountException(){
         super("This transaction will not be processed. Insufficient account funds");
