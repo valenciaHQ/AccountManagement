@@ -1,12 +1,55 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, {Component} from "react";
+import {render} from "react-dom";
+import {AccountAmount, AccountBox, AccountTitle, Button, ButtonsWrapper, Container, Input} from './styled'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            accountData: undefined,
+            debitValue: undefined,
+            creditValue: undefined
+        };
+    }
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    componentWillMount() {
+        this.fetchAPI();
+    }
+
+    fetchAPI = () => {
+        fetch(
+            'http://localhost:8080/api/account',
+            {
+                crossDomain: false,
+                method: 'GET'
+            }
+        )
+            .then(response => response.json())
+            .then(data => {
+                this.setState({accountData: data.amount})
+            })
+            .catch(rejected => {
+                console.log(rejected);
+            });
+    };
+
+    render() {
+        const {accountData} = this.state;
+        return (
+            <Container>
+                <AccountBox>
+                    <AccountTitle>Current Amount:</AccountTitle>
+                    <AccountAmount>{accountData}</AccountAmount>
+                </AccountBox>
+                <ButtonsWrapper>
+                    <Button onClick={this.handleDebit}>Debit</Button>
+                    <Input value={this.state.debitValue}/>
+                    <Button onClick={this.handleDebit}>Credit</Button>
+                    <Input value={this.state.creditvalue}/>
+                </ButtonsWrapper>
+            </Container>
+        )
+    }
+}
+
+render(<App/>, document.getElementById("root"));
