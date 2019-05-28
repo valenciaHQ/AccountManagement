@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
+import {Accordion, AccordionItem} from 'react-sanfona';
 
 import {
     AccountAmount,
@@ -10,7 +11,8 @@ import {
     Container,
     Error,
     Input,
-    TransactionsTitle
+    TransactionsTitle,
+    TransactionDetail
 } from './styled'
 
 class App extends Component {
@@ -120,12 +122,17 @@ class App extends Component {
                 </ButtonsWrapper>
                 {error && (<Error>{error}</Error>)}
                 <TransactionsTitle>Transactions history</TransactionsTitle>
-                {transactionsHistory && transactionsHistory.map((transaction, index) => {
-                    return <TransactionsContainer key={index}>
-                        const {amount, type} = transaction
-                        <Transaction amount={amount} type={type}/>
-                    </TransactionsContainer>
-                })}
+                <Accordion>
+                    {transactionsHistory && transactionsHistory.map((item, index) => {
+                        return (
+                            <AccordionItem title={`Transaction: ${index} - ${item.createDate}` } expanded={item === 1}>
+                                <TransactionDetail>
+                                    {`${item.type}: $${item.amount}`}
+                                </TransactionDetail>
+                            </AccordionItem>
+                        );
+                    })}
+                </Accordion>
             </Container>
         )
     }

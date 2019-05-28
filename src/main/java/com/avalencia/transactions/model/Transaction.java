@@ -2,10 +2,6 @@ package com.avalencia.transactions.model;
 
 import java.io.Serializable;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-@ApiModel
 public class Transaction implements Serializable {
 
     public Transaction() {
@@ -15,13 +11,10 @@ public class Transaction implements Serializable {
         this.amount = amount;
     }
 
-    @ApiModelProperty
     private double amount;
 
-    @ApiModelProperty
     private TransactionTypes type;
 
-    @ApiModelProperty
     private String createDate;
 
     public String getCreateDate() {

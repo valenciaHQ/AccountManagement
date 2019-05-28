@@ -3,10 +3,6 @@ package com.avalencia.transactions.model;
 import java.io.Serializable;
 import java.util.List;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-@ApiModel
 public class Account implements Serializable {
 
     public Account() {
@@ -17,10 +13,8 @@ public class Account implements Serializable {
         this.transactions = transactions;
     }
 
-    @ApiModelProperty
     private double amount;
 
-    @ApiModelProperty
     private List<Transaction> transactions;
 
     public List<Transaction> getTransactions() {

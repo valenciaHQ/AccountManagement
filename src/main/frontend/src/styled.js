@@ -51,8 +51,12 @@ export const Error = styled.div`
     margin-top: 20px;
     text-align:center
     color:red
-`
+`;
 
 export const TransactionsTitle = styled.h2`
     color: "black";
-`
+`;
+
+export const TransactionDetail = styled.div`
+    margin: 15px 0 15px 0;
+`;
