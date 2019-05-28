@@ -11,8 +11,8 @@ import {
     Container,
     Error,
     Input,
-    TransactionsTitle,
-    TransactionDetail
+    TransactionDetail,
+    TransactionsTitle
 } from './styled'
 
 class App extends Component {
