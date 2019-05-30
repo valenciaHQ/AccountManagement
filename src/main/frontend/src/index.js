@@ -15,14 +15,16 @@ import {
     TransactionsTitle
 } from './styled'
 
+import CONSTANTS from './constants'
+
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             accountData: undefined,
             transactionsHistory: [],
-            debit: '',
-            credit: '',
+            debit: 0,
+            credit: 0,
             error: ''
         };
     }
@@ -44,14 +46,13 @@ class App extends Component {
             .then(response => response.json())
             .then(data => {
                 const {amount, transactions} = data;
-                console.log(transactions)
                 this.setState({
                                   accountData: amount,
                                   transactionsHistory: transactions
                               })
             })
             .catch(rejected => {
-                console.log(rejected);
+                this.setState({error: CONSTANTS.ERROR_FETCH})
             });
     };
 
@@ -75,7 +76,8 @@ class App extends Component {
                 data.status && data.status === 200 && this.setState({error: ''}, () => this.fetchData());
             })
             .catch(rejected => {
-                console.log(rejected);
+                this.setState({error: CONSTANTS.ERROR_DEBIT_SUBMIT});
+                console.error(rejected);
             });
     };
 
@@ -93,13 +95,21 @@ class App extends Component {
             .then(response => response)
             .then(data => data.status === 200 && this.setState({error: ''}, () => this.fetchData()))
             .catch(rejected => {
-                console.log(rejected);
+                this.setState({error: CONSTANTS.ERROR_CREDIT_SUBMIT});
+                console.error(rejected);
             });
     };
 
+    handleSubmitCredit = () =>
+        this.state.credit <= 0 ? this.setState({error: CONSTANTS.ERROR_EMPTY_OR_ZERO_CREDIT})
+                               : this.handleCredit(this.state.credit);
+
+    handleSubmitDebit = () =>
+        this.state.debit <= 0 ? this.setState({error: CONSTANTS.ERROR_EMPTY_OR_ZERO_CREDIT})
+                              : this.handleDebit(this.state.debit);
+
     render() {
         const {accountData, debit, credit, error, transactionsHistory} = this.state;
-        console.log("render:", transactionsHistory)
         return (
             <Container>
                 <AccountBox>
@@ -112,20 +122,20 @@ class App extends Component {
                         value={debit}
                         onChange={e => this.onChange(e)}
                     />
-                    <Button onClick={this.handleDebit}>Debit</Button>
+                    <Button type="submit" onClick={this.handleSubmitDebit}>Debit</Button>
                     <Input
                         name="credit"
                         value={credit}
                         onChange={e => this.onChange(e)}
                     />
-                    <Button onClick={this.handleCredit}>Credit</Button>
+                    <Button type="submit" onClick={this.handleSubmitCredit}>Credit</Button>
                 </ButtonsWrapper>
                 {error && (<Error>{error}</Error>)}
                 <TransactionsTitle>Transactions history</TransactionsTitle>
                 <Accordion>
                     {transactionsHistory && transactionsHistory.map((item, index) => {
                         return (
-                            <AccordionItem title={`Transaction: ${index} - ${item.createDate}` } expanded={item === 1}>
+                            <AccordionItem key={index} title={`Transaction: ${index} - ${item.createDate}`} expanded={item === 1}>
                                 <TransactionDetail>
                                     {`${item.type}: $${item.amount}`}
                                 </TransactionDetail>
